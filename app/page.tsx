@@ -8,8 +8,7 @@ export default function Home() {
       </h1>
       
       <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
-        여기는 Vercel에 즉시 배포할 수 있는 가장 단순하고 깔끔한 웹앱의 기본 뼈대입니다. 
-        복잡한 로직 없이 바로 시작하여 필요한 기능을 하나씩 덧붙여보세요.
+        어려운 수학을 게임이나 놀이를 통해 저절로 배워지는 놀이터
       </p>
 
       {/* 가짜(Placeholder) 버튼 */}
