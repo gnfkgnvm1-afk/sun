@@ -1,10 +1,12 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 flex flex-col items-center text-center">
       
       {/* Hero Section */}
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
-        순화쌤 <span className="text-blue-600">수학교실</span>
+        순화쌤 <span className="text-pink-500">수학교실</span>
       </h1>
       
       <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
@@ -13,7 +15,7 @@ export default function Home() {
 
       {/* 가짜(Placeholder) 버튼 */}
       {/* 클릭 시 작동할 로직(예: 라우팅, 모달 띄우기)을 나중에 이 곳에 추가하세요. */}
-      <button className="px-8 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md shadow-blue-500/20 transition-all active:scale-95 text-lg">
+      <button className="px-8 py-3.5 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow-md shadow-pink-400/20 transition-all active:scale-95 text-lg">
         학습 시작하기
       </button>
 
@@ -23,9 +25,16 @@ export default function Home() {
         // 예시 2: <Features /> (주요 기능 소개)
         // 예시 3: <Testimonials /> (수강 후기)
       */}
-      <div className="mt-32 w-full border-t border-slate-200 pt-16 flex flex-col items-center">
-        <div className="w-full max-w-4xl aspect-[16/9] rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400">
-          <p>여기에 대시보드 미리보기나 소개 영상, 혹은 추가 콘텐츠가 들어갈 수 있습니다.</p>
+      <div className="mt-16 w-full flex flex-col items-center">
+        <div className="w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl shadow-pink-200 border border-pink-100 flex items-center justify-center bg-pink-50">
+          <Image 
+            src="/hero.png" 
+            alt="귀여운 수학 놀이터" 
+            width={1024} 
+            height={1024} 
+            className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+            priority
+          />
         </div>
       </div>
 

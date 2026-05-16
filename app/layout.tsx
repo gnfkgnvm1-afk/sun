@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "나만의 교육용 웹앱",
-  description: "가장 단순하고 깔끔한 교육용 웹앱 보일러플레이트",
+  title: "순화쌤 수학교실",
+  description: "어려운 수학을 게임이나 놀이를 통해 저절로 배워지는 놀이터",
 };
 
 export default function RootLayout({
@@ -19,23 +19,23 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen flex flex-col bg-slate-50 text-slate-900`}>
         {/* 상단 헤더 영역 */}
         {/* 여기에 새로운 헤더 컴포넌트나 네비게이션 바를 추가하세요 */}
-        <header className="w-full bg-white border-b border-slate-200 sticky top-0 z-50">
+        <header className="w-full bg-white border-b border-pink-100 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             {/* 서비스 로고 (텍스트) */}
-            <div className="font-bold text-xl text-blue-600">
-              EduApp
+            <div className="font-bold text-xl text-pink-500">
+              순화쌤 수학교실
             </div>
             
             {/* 네비게이션 바 공간 (모바일에서는 숨김 처리됨) */}
             <nav className="hidden sm:flex space-x-8">
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">강의 목록</a>
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">학습 자료</a>
-              <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">커뮤니티</a>
+              <a href="#" className="text-sm font-medium text-slate-600 hover:text-pink-500 transition-colors">강의 목록</a>
+              <a href="#" className="text-sm font-medium text-slate-600 hover:text-pink-500 transition-colors">학습 자료</a>
+              <a href="#" className="text-sm font-medium text-slate-600 hover:text-pink-500 transition-colors">커뮤니티</a>
             </nav>
             
             {/* 로그인/회원가입 등 유틸리티 영역 */}
             <div className="flex items-center space-x-4">
-              <button className="text-sm font-medium px-4 py-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-md transition-colors">
+              <button className="text-sm font-medium px-4 py-2 text-slate-600 hover:text-pink-500 hover:bg-pink-50 rounded-md transition-colors">
                 로그인
               </button>
             </div>
