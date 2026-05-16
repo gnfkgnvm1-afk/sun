@@ -4,7 +4,7 @@ export default function Home() {
       
       {/* Hero Section */}
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
-        나만의 <span className="text-blue-600">교육용 웹앱</span> 만들기
+        순화쌤 <span className="text-blue-600">수학교실</span>
       </h1>
       
       <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
