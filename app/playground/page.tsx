@@ -31,10 +31,22 @@ export default function Playground() {
           </div>
         </div>
 
-        {/* 나중에 추가될 다른 게임들을 위한 빈 카드들 (예시) */}
-        <div className="bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-8 text-slate-400 min-h-[400px]">
-          <span className="text-4xl mb-4">🔒</span>
-          <p className="font-medium text-lg">새로운 게임이<br/>준비 중입니다</p>
+        {/* 일차부등식 게임 카드 */}
+        <div className="bg-white rounded-3xl shadow-xl shadow-blue-100 border border-blue-50 overflow-hidden flex flex-col transition-transform hover:scale-105 duration-300">
+          <div className="h-48 bg-blue-50 flex items-center justify-center text-6xl">
+            🧮
+          </div>
+          <div className="p-8 flex flex-col flex-grow">
+            <h2 className="text-2xl font-bold text-slate-800 mb-4">일차부등식 풀기</h2>
+            <p className="text-slate-600 mb-8 flex-grow">
+              x가 포함된 일차부등식을 직접 풀어볼까요? 이항과 양변 나누기를 통해 정확한 x의 범위를 찾아보세요!
+            </p>
+            <Link href="/game/linear-inequality" className="w-full mt-auto">
+              <button className="w-full px-6 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-lg shadow-md shadow-blue-200 transition-all active:scale-95">
+                일차부등식 게임 시작 🚀
+              </button>
+            </Link>
+          </div>
         </div>
 
         <div className="bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-8 text-slate-400 min-h-[400px]">
