@@ -11,48 +11,39 @@ export default function Playground() {
         이곳에서는 다양한 수학 게임을 즐길 수 있습니다. 원하는 게임을 선택해서 즐겁게 수학을 배워보세요!
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 w-full max-w-7xl">
         
         {/* 부등식 게임 카드 */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-pink-100 border border-pink-50 overflow-hidden flex flex-col transition-transform hover:scale-105 duration-300">
-          <div className="h-48 bg-pink-100 flex items-center justify-center text-6xl">
-            ⚖️
+        <Link href="/game/inequality" className="group">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              ⚖️
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
+              부등식 방향
+            </h2>
           </div>
-          <div className="p-8 flex flex-col flex-grow">
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">부등식의 방향 맞히기</h2>
-            <p className="text-slate-600 mb-8 flex-grow">
-              양수와 음수를 더하고 뺄 때, 곱하고 나눌 때 부등호의 방향은 어떻게 될까요? 게임을 통해 완벽하게 마스터해 보세요!
-            </p>
-            <Link href="/game/inequality" className="w-full mt-auto">
-              <button className="w-full px-6 py-4 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-lg shadow-md shadow-pink-200 transition-all active:scale-95">
-                부등식 게임 시작하기 🚀
-              </button>
-            </Link>
-          </div>
-        </div>
+        </Link>
 
         {/* 일차부등식 게임 카드 */}
-        <div className="bg-white rounded-3xl shadow-xl shadow-blue-100 border border-blue-50 overflow-hidden flex flex-col transition-transform hover:scale-105 duration-300">
-          <div className="h-48 bg-blue-50 flex items-center justify-center text-6xl">
-            🧮
+        <Link href="/game/linear-inequality" className="group">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              🧮
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
+              일차부등식
+            </h2>
           </div>
-          <div className="p-8 flex flex-col flex-grow">
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">일차부등식 풀기</h2>
-            <p className="text-slate-600 mb-8 flex-grow">
-              x가 포함된 일차부등식을 직접 풀어볼까요? 이항과 양변 나누기를 통해 정확한 x의 범위를 찾아보세요!
-            </p>
-            <Link href="/game/linear-inequality" className="w-full mt-auto">
-              <button className="w-full px-6 py-4 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-lg shadow-md shadow-blue-200 transition-all active:scale-95">
-                일차부등식 게임 시작 🚀
-              </button>
-            </Link>
-          </div>
-        </div>
+        </Link>
 
-        <div className="bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center p-8 text-slate-400 min-h-[400px]">
-          <span className="text-4xl mb-4">🔒</span>
-          <p className="font-medium text-lg">새로운 게임이<br/>준비 중입니다</p>
-        </div>
+        {/* 나중에 추가될 다른 게임들을 위한 빈 카드들 */}
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center transition-all duration-200 aspect-square p-4 text-slate-300">
+            <div className="text-2xl sm:text-3xl mb-2 opacity-50">🔒</div>
+            <p className="text-xs sm:text-sm font-medium text-center">준비 중</p>
+          </div>
+        ))}
 
       </div>
     </div>
