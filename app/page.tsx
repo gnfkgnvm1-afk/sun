@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -13,11 +14,12 @@ export default function Home() {
         어려운 수학을 게임이나 놀이를 통해 저절로 배워지는 놀이터
       </p>
 
-      {/* 가짜(Placeholder) 버튼 */}
-      {/* 클릭 시 작동할 로직(예: 라우팅, 모달 띄우기)을 나중에 이 곳에 추가하세요. */}
-      <button className="px-8 py-3.5 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow-md shadow-pink-400/20 transition-all active:scale-95 text-lg">
-        학습 시작하기
-      </button>
+      {/* 게임으로 이동하는 버튼 */}
+      <Link href="/game/inequality">
+        <button className="px-8 py-3.5 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow-md shadow-pink-400/20 transition-all active:scale-95 text-lg">
+          부등식 게임 시작하기
+        </button>
+      </Link>
 
       {/* 
         // 여기에 새로운 컴포넌트를 추가하세요 
