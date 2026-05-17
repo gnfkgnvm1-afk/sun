@@ -1,3 +1,4 @@
+// Trigger redeploy for brand name change
 import Image from "next/image";
 import Link from "next/link";
 
