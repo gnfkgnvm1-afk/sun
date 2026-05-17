@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "채령이의 수학나라",
+  title: "북중의 수학 낙원",
   description: "어려운 수학을 게임이나 놀이를 통해 저절로 배워지는 놀이터",
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             {/* 서비스 로고 (텍스트) - 클릭 시 홈으로 이동 */}
             <Link href="/" className="font-bold text-xl text-pink-500 hover:text-pink-600 transition-colors cursor-pointer">
-              채령이의 수학나라
+              북중의 수학 낙원
             </Link>
             
             {/* 네비게이션 바 공간 (모바일에서는 숨김 처리됨) */}
