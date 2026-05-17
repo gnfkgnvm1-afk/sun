@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 type Question = {
@@ -10,45 +10,54 @@ type Question = {
   explanation: string;
 };
 
-const questions: Question[] = [
-  {
-    initialCondition: "a < b",
-    operation: "양변에 2를 더하면?",
-    correctAnswer: "<",
-    explanation: "같은 수를 더해도 부등호 방향은 그대로 유지됩니다!",
-  },
-  {
-    initialCondition: "x > y",
-    operation: "양변에 -5를 곱하면?",
-    correctAnswer: "<",
-    explanation: "🔥주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!",
-  },
-  {
-    initialCondition: "-2a ≤ -2b",
-    operation: "양변을 -2로 나누면?",
-    correctAnswer: "≥",
-    explanation: "🔥주의! 음수로 나누면 부등호 방향이 반대로 바뀝니다!",
-  },
-  {
-    initialCondition: "3x ≥ 3y",
-    operation: "양변을 3으로 나누면?",
-    correctAnswer: "≥",
-    explanation: "양수로 나누면 부등호 방향은 그대로 유지됩니다!",
-  },
-  {
-    initialCondition: "a < b",
-    operation: "양변에서 10을 빼면?",
-    correctAnswer: "<",
-    explanation: "같은 수를 빼도 부등호 방향은 그대로 유지됩니다!",
-  },
+const allQuestions: Question[] = [
+  { initialCondition: "a < b", operation: "양변에 5를 더하면?", correctAnswer: "<", explanation: "같은 수를 더해도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "a > b", operation: "양변에서 3을 빼면?", correctAnswer: ">", explanation: "같은 수를 빼도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "x ≤ y", operation: "양변에 2를 곱하면?", correctAnswer: "≤", explanation: "양수를 곱해도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "x ≥ y", operation: "양변을 4로 나누면?", correctAnswer: "≥", explanation: "양수로 나누어도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "a < b", operation: "양변에 -2를 곱하면?", correctAnswer: ">", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "a > b", operation: "양변을 -3으로 나누면?", correctAnswer: "<", explanation: "🔥 주의! 음수로 나누면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "x ≤ y", operation: "양변에 -1을 곱하면?", correctAnswer: "≥", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "x ≥ y", operation: "양변을 -5로 나누면?", correctAnswer: "≤", explanation: "🔥 주의! 음수로 나누면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "-a < -b", operation: "양변에 -1을 곱하면?", correctAnswer: ">", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "2a > 2b", operation: "양변을 2로 나누면?", correctAnswer: ">", explanation: "양수로 나누면 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "-3x ≤ -3y", operation: "양변을 -3으로 나누면?", correctAnswer: "≥", explanation: "🔥 주의! 음수로 나누면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "a/2 < b/2", operation: "양변에 2를 곱하면?", correctAnswer: "<", explanation: "양수를 곱해도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "-x/4 > -y/4", operation: "양변에 -4를 곱하면?", correctAnswer: "<", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "a + 7 < b + 7", operation: "양변에서 7을 빼면?", correctAnswer: "<", explanation: "같은 수를 빼도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "x - 5 ≥ y - 5", operation: "양변에 5를 더하면?", correctAnswer: "≥", explanation: "같은 수를 더해도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "10a < 10b", operation: "양변을 10으로 나누면?", correctAnswer: "<", explanation: "양수로 나누면 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "-100x > -100y", operation: "양변을 -100으로 나누면?", correctAnswer: "<", explanation: "🔥 주의! 음수로 나누면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "a < b", operation: "양변에 -10을 더하면?", correctAnswer: "<", explanation: "음수를 더해도 부등호 방향은 그대로 유지됩니다!" },
+  { initialCondition: "a > b", operation: "양변에 -0.5를 곱하면?", correctAnswer: "<", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" },
+  { initialCondition: "-x ≤ -y", operation: "양변에 -2를 곱하면?", correctAnswer: "≥", explanation: "🔥 주의! 음수를 곱하면 부등호 방향이 반대로 바뀝니다!" }
 ];
 
+function shuffle(array: any[]) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 export default function InequalityGame() {
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+
+  // 컴포넌트가 마운트될 때 무작위로 10문제를 뽑습니다.
+  useEffect(() => {
+    setQuestions(shuffle(allQuestions).slice(0, 10));
+  }, []);
+
+  if (questions.length === 0) {
+    return <div className="p-20 text-center">문제를 불러오는 중...</div>;
+  }
 
   const currentQuestion = questions[currentIndex];
 
@@ -57,7 +66,7 @@ export default function InequalityGame() {
     setIsCorrect(correct);
     setShowFeedback(true);
     if (correct) {
-      setScore((prev) => prev + 20);
+      setScore((prev) => prev + 10);
     }
   };
 
@@ -71,6 +80,7 @@ export default function InequalityGame() {
   };
 
   const resetGame = () => {
+    setQuestions(shuffle(allQuestions).slice(0, 10));
     setCurrentIndex(0);
     setScore(0);
     setShowFeedback(false);
@@ -85,7 +95,7 @@ export default function InequalityGame() {
           🎉 게임 완료! 🎉
         </h1>
         <div className="bg-white p-8 rounded-3xl shadow-xl shadow-pink-100 border border-pink-50 w-full max-w-md">
-          <p className="text-2xl text-slate-600 mb-4">최종 점수</p>
+          <p className="text-2xl text-slate-600 mb-4">최종 점수 (100점 만점)</p>
           <p className="text-6xl font-black text-pink-500 mb-8">{score}점</p>
           
           <div className="flex flex-col space-y-4">
@@ -93,10 +103,10 @@ export default function InequalityGame() {
               onClick={resetGame}
               className="px-6 py-3 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-bold text-lg transition-all"
             >
-              다시 하기
+              다른 문제로 다시 하기
             </button>
-            <Link href="/" className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg transition-all">
-              홈으로 돌아가기
+            <Link href="/playground" className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg transition-all">
+              놀이터로 돌아가기
             </Link>
           </div>
         </div>

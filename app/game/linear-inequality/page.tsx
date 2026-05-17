@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 type Question = {
@@ -10,45 +10,53 @@ type Question = {
   explanation: string;
 };
 
-const questions: Question[] = [
-  {
-    equation: "2x < 8",
-    options: ["x < 4", "x > 4", "x < 6", "x > 6"],
-    correctAnswer: "x < 4",
-    explanation: "양변을 2로 나누면 부등호 방향은 그대로 유지되며 x < 4 가 됩니다.",
-  },
-  {
-    equation: "-3x > 12",
-    options: ["x > -4", "x < -4", "x > 4", "x < 4"],
-    correctAnswer: "x < -4",
-    explanation: "🔥 양변을 음수(-3)로 나누면 부등호의 방향이 반대로 바뀝니다!",
-  },
-  {
-    equation: "x + 5 ≤ 2",
-    options: ["x ≤ 3", "x ≥ 3", "x ≤ -3", "x ≥ -3"],
-    correctAnswer: "x ≤ -3",
-    explanation: "+5를 우변으로 이항하면 x ≤ 2 - 5 가 되어 x ≤ -3 이 됩니다.",
-  },
-  {
-    equation: "-2x + 1 ≥ 7",
-    options: ["x ≥ 3", "x ≤ 3", "x ≥ -3", "x ≤ -3"],
-    correctAnswer: "x ≤ -3",
-    explanation: "1을 이항하면 -2x ≥ 6, 양변을 -2로 나누면 부등호가 바뀌어 x ≤ -3 이 됩니다.",
-  },
-  {
-    equation: "3x - 4 < x + 6",
-    options: ["x < 1", "x > 1", "x < 5", "x > 5"],
-    correctAnswer: "x < 5",
-    explanation: "x를 왼쪽으로, 숫자를 오른쪽으로 이항하면 2x < 10 이 되고, 양변을 2로 나누면 x < 5 가 됩니다.",
-  },
+const allQuestions: Question[] = [
+  { equation: "x + 3 < 8", options: ["x < 5", "x > 5", "x < 11", "x > 11"], correctAnswer: "x < 5", explanation: "3을 우변으로 이항하면 x < 8 - 3 이 됩니다." },
+  { equation: "x - 4 > 2", options: ["x > 6", "x < 6", "x > -2", "x < -2"], correctAnswer: "x > 6", explanation: "-4를 이항하면 x > 2 + 4 가 됩니다." },
+  { equation: "2x ≤ 10", options: ["x ≤ 5", "x ≥ 5", "x ≤ 8", "x ≥ 8"], correctAnswer: "x ≤ 5", explanation: "양변을 양수 2로 나누므로 부등호 방향은 유지됩니다." },
+  { equation: "-3x ≥ 12", options: ["x ≤ -4", "x ≥ -4", "x ≤ 4", "x ≥ 4"], correctAnswer: "x ≤ -4", explanation: "🔥 양변을 음수 -3으로 나누면 부등호 방향이 바뀝니다!" },
+  { equation: "4x < 20", options: ["x < 5", "x > 5", "x < 16", "x > 16"], correctAnswer: "x < 5", explanation: "양변을 양수 4로 나누므로 부등호 방향은 유지됩니다." },
+  { equation: "-x > 7", options: ["x < -7", "x > -7", "x < 7", "x > 7"], correctAnswer: "x < -7", explanation: "🔥 양변에 -1을 곱하면 부등호 방향이 바뀝니다!" },
+  { equation: "2x + 1 < 7", options: ["x < 3", "x > 3", "x < 4", "x > 4"], correctAnswer: "x < 3", explanation: "1을 이항하면 2x < 6, 양변을 2로 나누면 x < 3." },
+  { equation: "3x - 2 ≥ 10", options: ["x ≥ 4", "x ≤ 4", "x ≥ 12", "x ≤ 12"], correctAnswer: "x ≥ 4", explanation: "-2를 이항하면 3x ≥ 12, 양변을 3으로 나누면 x ≥ 4." },
+  { equation: "-2x + 5 < 1", options: ["x > 2", "x < 2", "x > -2", "x < -2"], correctAnswer: "x > 2", explanation: "5를 이항하면 -2x < -4, 🔥 음수 -2로 나누면 부등호가 바뀌어 x > 2." },
+  { equation: "-4x - 3 ≤ 9", options: ["x ≥ -3", "x ≤ -3", "x ≥ 3", "x ≤ 3"], correctAnswer: "x ≥ -3", explanation: "-3을 이항하면 -4x ≤ 12, 🔥 음수 -4로 나누면 부등호가 바뀌어 x ≥ -3." },
+  { equation: "5x > 3x + 8", options: ["x > 4", "x < 4", "x > 2", "x < 2"], correctAnswer: "x > 4", explanation: "3x를 좌변으로 이항하면 2x > 8, 양변을 2로 나누면 x > 4." },
+  { equation: "2x + 5 < 4x - 1", options: ["x > 3", "x < 3", "x > -3", "x < -3"], correctAnswer: "x > 3", explanation: "4x를 좌변으로 이항하면 -2x < -6, 🔥 -2로 나누면 부등호가 바뀌어 x > 3." },
+  { equation: "x/2 > 4", options: ["x > 8", "x < 8", "x > 2", "x < 2"], correctAnswer: "x > 8", explanation: "양변에 양수 2를 곱하므로 부등호 방향은 유지됩니다." },
+  { equation: "-x/3 ≤ 2", options: ["x ≥ -6", "x ≤ -6", "x ≥ 6", "x ≤ 6"], correctAnswer: "x ≥ -6", explanation: "🔥 양변에 음수 -3을 곱하면 부등호 방향이 바뀝니다!" },
+  { equation: "3(x - 1) < 6", options: ["x < 3", "x > 3", "x < 1", "x > 1"], correctAnswer: "x < 3", explanation: "괄호를 풀면 3x - 3 < 6, 이항하면 3x < 9, 양변을 3으로 나누면 x < 3." },
+  { equation: "-2(x + 2) ≥ -8", options: ["x ≤ 2", "x ≥ 2", "x ≤ -2", "x ≥ -2"], correctAnswer: "x ≤ 2", explanation: "🔥 양변을 -2로 먼저 나누면 부등호가 바뀌어 x + 2 ≤ 4, 이항하면 x ≤ 2." },
+  { equation: "0.5x < 2", options: ["x < 4", "x > 4", "x < 1", "x > 1"], correctAnswer: "x < 4", explanation: "양변에 양수 2를 곱하므로 부등호 방향은 유지됩니다." },
+  { equation: "x - 7 ≤ -3", options: ["x ≤ 4", "x ≥ 4", "x ≤ -10", "x ≥ -10"], correctAnswer: "x ≤ 4", explanation: "-7을 이항하면 x ≤ -3 + 7 이 되어 x ≤ 4." },
+  { equation: "7x + 2 > 5x + 10", options: ["x > 4", "x < 4", "x > 6", "x < 6"], correctAnswer: "x > 4", explanation: "5x를 좌변으로 이항하면 2x > 8, 양변을 2로 나누면 x > 4." },
+  { equation: "-x + 4 < 9", options: ["x > -5", "x < -5", "x > 5", "x < 5"], correctAnswer: "x > -5", explanation: "4를 이항하면 -x < 5, 🔥 양변에 -1을 곱하면 부등호가 바뀌어 x > -5." }
 ];
 
+function shuffle(array: any[]) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 export default function LinearInequalityGame() {
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+
+  useEffect(() => {
+    setQuestions(shuffle(allQuestions).slice(0, 10));
+  }, []);
+
+  if (questions.length === 0) {
+    return <div className="p-20 text-center">문제를 불러오는 중...</div>;
+  }
 
   const currentQuestion = questions[currentIndex];
 
@@ -57,7 +65,7 @@ export default function LinearInequalityGame() {
     setIsCorrect(correct);
     setShowFeedback(true);
     if (correct) {
-      setScore((prev) => prev + 20);
+      setScore((prev) => prev + 10);
     }
   };
 
@@ -71,6 +79,7 @@ export default function LinearInequalityGame() {
   };
 
   const resetGame = () => {
+    setQuestions(shuffle(allQuestions).slice(0, 10));
     setCurrentIndex(0);
     setScore(0);
     setShowFeedback(false);
@@ -85,7 +94,7 @@ export default function LinearInequalityGame() {
           🎉 게임 완료! 🎉
         </h1>
         <div className="bg-white p-8 rounded-3xl shadow-xl shadow-blue-100 border border-blue-50 w-full max-w-md">
-          <p className="text-2xl text-slate-600 mb-4">최종 점수</p>
+          <p className="text-2xl text-slate-600 mb-4">최종 점수 (100점 만점)</p>
           <p className="text-6xl font-black text-blue-500 mb-8">{score}점</p>
           
           <div className="flex flex-col space-y-4">
@@ -93,7 +102,7 @@ export default function LinearInequalityGame() {
               onClick={resetGame}
               className="px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-lg transition-all"
             >
-              다시 하기
+              다른 문제로 다시 하기
             </button>
             <Link href="/playground" className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-lg transition-all">
               놀이터로 돌아가기
