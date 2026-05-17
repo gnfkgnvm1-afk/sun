@@ -61,9 +61,17 @@ export default function IntegerMultiplicationGame() {
   const [isCorrect, setIsCorrect] = useState(false);
   const [gameOver, setGameOver] = useState(false);
 
+  const getRandomQuestions = () => {
+    const selected = shuffle(allQuestions).slice(0, 10);
+    return selected.map((q) => ({
+      ...q,
+      options: shuffle(q.options),
+    }));
+  };
+
   useEffect(() => {
-    // 30개 중 10개를 무작위로 뽑습니다.
-    setQuestions(shuffle(allQuestions).slice(0, 10));
+    // 30개 중 10개를 무작위로 뽑고 보기 순서도 섞습니다.
+    setQuestions(getRandomQuestions());
   }, []);
 
   if (questions.length === 0) {
@@ -91,7 +99,7 @@ export default function IntegerMultiplicationGame() {
   };
 
   const resetGame = () => {
-    setQuestions(shuffle(allQuestions).slice(0, 10));
+    setQuestions(getRandomQuestions());
     setCurrentIndex(0);
     setScore(0);
     setShowFeedback(false);
