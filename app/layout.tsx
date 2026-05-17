@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -21,10 +22,10 @@ export default function RootLayout({
         {/* 여기에 새로운 헤더 컴포넌트나 네비게이션 바를 추가하세요 */}
         <header className="w-full bg-white border-b border-pink-100 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            {/* 서비스 로고 (텍스트) */}
-            <div className="font-bold text-xl text-pink-500">
+            {/* 서비스 로고 (텍스트) - 클릭 시 홈으로 이동 */}
+            <Link href="/" className="font-bold text-xl text-pink-500 hover:text-pink-600 transition-colors cursor-pointer">
               순화쌤 수학교실
-            </div>
+            </Link>
             
             {/* 네비게이션 바 공간 (모바일에서는 숨김 처리됨) */}
             <nav className="hidden sm:flex space-x-8">
