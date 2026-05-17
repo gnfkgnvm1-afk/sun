@@ -15,60 +15,65 @@ export default function Playground() {
         
         {/* 정수의 덧셈 뺄셈 게임 카드 */}
         <Link href="/game/integer-math" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-pink-200/60 hover:shadow-pink-300/60 border-2 border-pink-200 hover:border-pink-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ➕
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중1] 정수 계산
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-pink-600 text-xs sm:text-sm font-extrabold mb-1">[중1]</span>
+              정수 계산
             </h2>
           </div>
         </Link>
 
         {/* 정수의 곱셈 게임 카드 */}
         <Link href="/game/integer-multiplication" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-pink-200/60 hover:shadow-pink-300/60 border-2 border-pink-200 hover:border-pink-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ✖️
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중1] 정수 곱셈
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-pink-600 text-xs sm:text-sm font-extrabold mb-1">[중1]</span>
+              정수 곱셈
             </h2>
           </div>
         </Link>
 
         {/* 부등식 게임 카드 */}
         <Link href="/game/inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-yellow-100 border border-yellow-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-amber-200/60 hover:shadow-amber-300/60 border-2 border-amber-200 hover:border-amber-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ⚖️
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중2] 부등식 방향
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-amber-600 text-xs sm:text-sm font-extrabold mb-1">[중2]</span>
+              부등식 방향
             </h2>
           </div>
         </Link>
 
         {/* 일차부등식 게임 카드 */}
         <Link href="/game/linear-inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-yellow-100 border border-yellow-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-amber-200/60 hover:shadow-amber-300/60 border-2 border-amber-200 hover:border-amber-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               🧮
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중2] 일차부등식
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-amber-600 text-xs sm:text-sm font-extrabold mb-1">[중2]</span>
+              일차부등식
             </h2>
           </div>
         </Link>
 
         {/* 식의 곱셈 게임 카드 */}
         <Link href="/game/polynomial-multiplication" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-blue-200/60 hover:shadow-blue-300/60 border-2 border-blue-200 hover:border-blue-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               📝
             </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중3] 식의 곱셈
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-blue-600 text-xs sm:text-sm font-extrabold mb-1">[중3]</span>
+              식의 곱셈
             </h2>
           </div>
         </Link>
