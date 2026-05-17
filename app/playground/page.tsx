@@ -20,7 +20,7 @@ export default function Playground() {
               ⚖️
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              부등식 방향
+              [중2] 부등식 방향
             </h2>
           </div>
         </Link>
@@ -32,7 +32,7 @@ export default function Playground() {
               🧮
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              일차부등식
+              [중2] 일차부등식
             </h2>
           </div>
         </Link>
@@ -44,7 +44,7 @@ export default function Playground() {
               ➕
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              정수 계산
+              [중1] 정수 계산
             </h2>
           </div>
         </Link>
@@ -56,7 +56,7 @@ export default function Playground() {
               ✖️
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              정수 곱셈
+              [중1] 정수 곱셈
             </h2>
           </div>
         </Link>
@@ -68,7 +68,7 @@ export default function Playground() {
               📝
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              식의 곱셈
+              [중3] 식의 곱셈
             </h2>
           </div>
         </Link>
