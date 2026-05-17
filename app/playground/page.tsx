@@ -13,30 +13,6 @@ export default function Playground() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 w-full max-w-7xl">
         
-        {/* 부등식 게임 카드 */}
-        <Link href="/game/inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
-              ⚖️
-            </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중2] 부등식 방향
-            </h2>
-          </div>
-        </Link>
-
-        {/* 일차부등식 게임 카드 */}
-        <Link href="/game/linear-inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
-              🧮
-            </div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
-              [중2] 일차부등식
-            </h2>
-          </div>
-        </Link>
-
         {/* 정수의 덧셈 뺄셈 게임 카드 */}
         <Link href="/game/integer-math" className="group">
           <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-emerald-100 border border-emerald-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
@@ -57,6 +33,30 @@ export default function Playground() {
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
               [중1] 정수 곱셈
+            </h2>
+          </div>
+        </Link>
+
+        {/* 부등식 게임 카드 */}
+        <Link href="/game/inequality" className="group">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              ⚖️
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
+              [중2] 부등식 방향
+            </h2>
+          </div>
+        </Link>
+
+        {/* 일차부등식 게임 카드 */}
+        <Link href="/game/linear-inequality" className="group">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              🧮
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
+              [중2] 일차부등식
             </h2>
           </div>
         </Link>
