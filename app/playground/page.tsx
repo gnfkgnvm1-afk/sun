@@ -15,8 +15,8 @@ export default function Playground() {
         
         {/* 정수의 덧셈 뺄셈 게임 카드 */}
         <Link href="/game/integer-math" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-emerald-100 border border-emerald-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ➕
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
@@ -27,8 +27,8 @@ export default function Playground() {
 
         {/* 정수의 곱셈 게임 카드 */}
         <Link href="/game/integer-multiplication" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-purple-100 border border-purple-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-purple-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ✖️
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
@@ -39,8 +39,8 @@ export default function Playground() {
 
         {/* 부등식 게임 카드 */}
         <Link href="/game/inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-pink-100 border border-pink-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-yellow-100 border border-yellow-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               ⚖️
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
@@ -51,8 +51,8 @@ export default function Playground() {
 
         {/* 일차부등식 게임 카드 */}
         <Link href="/game/linear-inequality" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-yellow-100 border border-yellow-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-yellow-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               🧮
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
@@ -63,8 +63,8 @@ export default function Playground() {
 
         {/* 식의 곱셈 게임 카드 */}
         <Link href="/game/polynomial-multiplication" className="group">
-          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-amber-100 border border-amber-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-blue-100 border border-blue-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-blue-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
               📝
             </div>
             <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
