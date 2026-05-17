@@ -61,8 +61,20 @@ export default function Playground() {
           </div>
         </Link>
 
+        {/* 식의 곱셈 게임 카드 */}
+        <Link href="/game/polynomial-multiplication" className="group">
+          <div className="bg-white rounded-2xl shadow-sm hover:shadow-md shadow-amber-100 border border-amber-100 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1 duration-200 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-50 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              📝
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep">
+              식의 곱셈
+            </h2>
+          </div>
+        </Link>
+
         {/* 나중에 추가될 다른 게임들을 위한 빈 카드들 */}
-        {Array.from({ length: 8 }).map((_, i) => (
+        {Array.from({ length: 7 }).map((_, i) => (
           <div key={i} className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center transition-all duration-200 aspect-square p-4 text-slate-300">
             <div className="text-2xl sm:text-3xl mb-2 opacity-50">🔒</div>
             <p className="text-xs sm:text-sm font-medium text-center">준비 중</p>
