@@ -7,7 +7,7 @@ export default function Home() {
       
       {/* Hero Section */}
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-slate-900 tracking-tight mb-6">
-        순화쌤 <span className="text-pink-500">수학교실</span>
+        채령이의 <span className="text-pink-500">수학나라</span>
       </h1>
       
       <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mb-10 leading-relaxed">
