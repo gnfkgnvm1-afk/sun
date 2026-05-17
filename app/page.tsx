@@ -28,16 +28,22 @@ export default function Home() {
         // 예시 3: <Testimonials /> (수강 후기)
       */}
       <div className="mt-16 w-full flex flex-col items-center">
-        <div className="w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl shadow-pink-200 border border-pink-100 flex items-center justify-center bg-pink-50">
-          <Image 
-            src="/hero.png" 
-            alt="귀여운 수학 놀이터" 
-            width={1024} 
-            height={1024} 
-            className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-            priority
-          />
-        </div>
+        <Link href="/game/inequality" className="w-full max-w-3xl block group cursor-pointer relative">
+          <div className="w-full rounded-3xl overflow-hidden shadow-2xl shadow-pink-200 border border-pink-100 flex items-center justify-center bg-pink-50">
+            {/* 그림 위쪽에 떠있는 귀여운 안내 문구 */}
+            <div className="absolute -top-6 -right-6 md:top-4 md:right-4 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full shadow-xl border-2 border-pink-200 text-pink-600 font-bold animate-bounce z-10 text-sm md:text-base">
+              놀이터 그림을 클릭해서 게임 시작! ✨
+            </div>
+            <Image 
+              src="/hero.png" 
+              alt="귀여운 수학 놀이터" 
+              width={1024} 
+              height={1024} 
+              className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+              priority
+            />
+          </div>
+        </Link>
       </div>
 
     </div>
