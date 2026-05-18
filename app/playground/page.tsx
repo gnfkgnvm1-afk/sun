@@ -91,8 +91,21 @@ export default function Playground() {
           </div>
         </Link>
 
+        {/* 인수분해 게임 카드 */}
+        <Link href="/game/factoring" className="group">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-purple-200/60 hover:shadow-purple-300/60 border-2 border-purple-200 hover:border-purple-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-purple-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              🔍
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-purple-600 text-xs sm:text-sm font-extrabold mb-1">[중3]</span>
+              인수분해
+            </h2>
+          </div>
+        </Link>
+
         {/* 나중에 추가될 다른 게임들을 위한 빈 카드들 */}
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center transition-all duration-200 aspect-square p-4 text-slate-300">
             <div className="text-2xl sm:text-3xl mb-2 opacity-50">🔒</div>
             <p className="text-xs sm:text-sm font-medium text-center">준비 중</p>
