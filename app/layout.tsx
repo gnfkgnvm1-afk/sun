@@ -53,7 +53,7 @@ export default function RootLayout({
         <footer className="bg-white border-t border-slate-200 mt-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between">
             <p className="text-sm text-slate-500">
-              © {new Date().getFullYear()} EduApp. All rights reserved.
+              © {new Date().getFullYear()} 북중의 수학 낙원. All rights reserved.
             </p>
             <div className="mt-4 sm:mt-0 flex space-x-4 text-sm text-slate-500">
               <a href="#" className="hover:text-slate-900 transition-colors">이용약관</a>
