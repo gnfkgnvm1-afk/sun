@@ -40,9 +40,6 @@ function quad(A:number,B:number,C:number){
   if(C>0)s+=` + ${C}`;else if(C<0)s+=` − ${Math.abs(C)}`;
   return s;
 }
-function termX2(v:number){if(v===1)return"x²";if(v===-1)return"−x²";return`${v}x²`;}
-function termX(v:number){if(v===0)return"0";if(v===1)return"x";if(v===-1)return"−x";return v>0?`${v}x`:`−${Math.abs(v)}x`;}
-function termC(v:number){return v>=0?`${v}`:`−${Math.abs(v)}`;}
 function fmtFactor(p:number,q:number){
   const x=p===1?"x":p===-1?"−x":`${p}x`;
   if(q===0)return x;
@@ -53,6 +50,62 @@ function checkAns(ip:number,iq:number,ir:number,is:number,q:Q){
   return ok(ip,iq,ir,is)||ok(ir,is,ip,iq)||ok(-ip,-iq,-ir,-is)||ok(-ir,-is,-ip,-iq);
 }
 
+// 입력값 파싱 헬퍼 (x계수)
+function parseXTerm(val: string): number | null {
+  const clean = val.trim().replace(/\s+/g, "").toLowerCase();
+  if (clean === "") return null;
+  if (clean === "x" || clean === "+x") return 1;
+  if (clean === "-x" || clean === "−x") return -1;
+  
+  if (clean.endsWith("x")) {
+    const numPart = clean.slice(0, -1);
+    if (numPart === "" || numPart === "+") return 1;
+    if (numPart === "-" || numPart === "−") return -1;
+    const parsed = parseInt(numPart);
+    return isNaN(parsed) ? null : parsed;
+  }
+  const parsed = parseInt(clean);
+  return isNaN(parsed) ? null : parsed;
+}
+
+// 입력값 파싱 헬퍼 (상수)
+function parseConstant(val: string): number | null {
+  const clean = val.trim().replace(/\s+/g, "");
+  if (clean === "") return null;
+  const parsed = parseInt(clean);
+  return isNaN(parsed) ? null : parsed;
+}
+
+// 렌더링 포맷 헬퍼
+function fmtTerm(val: number | null, type: 'x2' | 'x' | 'c', isFirstInRow: boolean) {
+  if (val === null) return null;
+  
+  if (type === 'x2') {
+    if (val === 0) return "";
+    let str = val === 1 ? "x²" : val === -1 ? "−x²" : `${val}x²`;
+    if (val > 0) return isFirstInRow ? str : `+ ${str}`;
+    else return isFirstInRow ? str : `− ${Math.abs(val)}x²`;
+  }
+  
+  if (type === 'x') {
+    if (val === 0) return isFirstInRow ? "0" : "+ 0x";
+    let str = val === 1 ? "x" : val === -1 ? "−x" : `${Math.abs(val)}x`;
+    if (val > 0) return isFirstInRow ? str : `+ ${str}`;
+    else {
+      if (val === -1) return isFirstInRow ? "−x" : "− x";
+      return isFirstInRow ? `−${Math.abs(val)}x` : `− ${Math.abs(val)}x`;
+    }
+  }
+  
+  if (type === 'c') {
+    if (val === 0) return isFirstInRow ? "0" : "+ 0";
+    let str = `${Math.abs(val)}`;
+    if (val > 0) return isFirstInRow ? str : `+ ${str}`;
+    else return isFirstInRow ? `−${str}` : `− ${str}`;
+  }
+  return "";
+}
+
 export default function FactoringGame(){
   const [qs,setQs]=useState<Q[]>([]);
   const [idx,setIdx]=useState(0);
@@ -61,28 +114,22 @@ export default function FactoringGame(){
   const [correct,setCorrect]=useState(false);
   const [over,setOver]=useState(false);
   const [showHint,setShowHint]=useState(false);
-  // 입력값: 위 행(p=x계수, q=상수), 왼쪽 열(r=x계수, s=상수)
-  const [vP,setVP]=useState(""); // 위행 왼(첫 인수 x계수)
-  const [vQ,setVQ]=useState(""); // 위행 오(첫 인수 상수)
-  const [vR,setVR]=useState(""); // 왼열 위(둘째 인수 x계수)
-  const [vS,setVS]=useState(""); // 왼열 아래(둘째 인수 상수)
+  
+  // 텍스트 입력값 (사용자가 x나 +2 등을 자유롭게 입력)
+  const [vP,setVP]=useState("");
+  const [vQ,setVQ]=useState("");
+  const [vR,setVR]=useState("");
+  const [vS,setVS]=useState("");
 
   useEffect(()=>{setQs(shuffle(ALL).slice(0,10));},[]);
   if(!qs.length)return<div className="p-20 text-center text-lg">불러오는 중...</div>;
 
   const q=qs[idx];
-  const p=parseInt(vP), qn=parseInt(vQ), r=parseInt(vR), s=parseInt(vS);
-  const hp=vP!==""&&!isNaN(p), hq=vQ!==""&&!isNaN(qn);
-  const hr=vR!==""&&!isNaN(r), hs=vS!==""&&!isNaN(s);
-  // 자동 계산되는 내부 셀
-  const c11=hp&&hr?p*r:null;
-  const c12=hq&&hr?qn*r:null;
-  const c21=hp&&hs?p*s:null;
-  const c22=hq&&hs?qn*s:null;
-  const crossSum=(c12!==null&&c21!==null)?c12+c21:null;
+  const p=parseXTerm(vP), qn=parseConstant(vQ), r=parseXTerm(vR), s=parseConstant(vS);
+  const hp=p!==null, hq=qn!==null, hr=r!==null, hs=s!==null;
 
   const submit=()=>{
-    if(!hp||!hq||!hr||!hs){alert("노란 칸을 모두 채워주세요!");return;}
+    if(!hp||!hq||!hr||!hs){alert("노란 칸을 모두 올바른 형식(예: x, -2x, +3, -5)으로 채워주세요!");return;}
     const ok=checkAns(p,qn,r,s,q);
     setCorrect(ok);setFb(true);
     if(ok)setScore(prev=>prev+10);
@@ -121,24 +168,37 @@ export default function FactoringGame(){
     );
   }
 
-  // 노란색 입력 칸 스타일
+  // 노란색 입력 칸 (텍스트)
   const yellow=`w-full h-14 text-center text-lg font-bold border-2 rounded-xl outline-none transition-all
     ${fb
       ?"bg-yellow-50 border-yellow-200 text-slate-500 cursor-not-allowed"
       :"border-yellow-400 focus:border-yellow-500 bg-yellow-50 text-slate-800 placeholder-yellow-300"}`;
 
-  // 흰색 자동계산 셀 스타일
-  const autoCell=(v:number|null,isCorner:boolean,target?:number)=>{
-    const base="h-14 flex items-center justify-center font-mono font-bold text-sm md:text-base border border-dashed rounded-xl transition-all select-none";
-    if(v===null)return`${base} border-slate-200 bg-white text-slate-200`;
-    if(fb&&isCorner&&target!==undefined)
-      return v===target?`${base} border-green-300 bg-green-50 text-green-700`:`${base} border-red-300 bg-red-50 text-red-500`;
-    return`${base} border-slate-300 bg-white text-slate-700`;
+  // 하단 그리드 셀 (피드백 색상 포함)
+  const calcCell=(v:string|null, isValid?:boolean)=>{
+    const base="h-14 flex items-center justify-center font-mono font-bold text-sm md:text-base border-b border-slate-200 transition-all select-none relative z-10";
+    if(v===null)return`${base} bg-white text-slate-200`;
+    if(fb&&isValid!==undefined)
+      return isValid?`${base} bg-green-50 text-green-700`:`${base} bg-red-50 text-red-500`;
+    return`${base} bg-white text-slate-700`;
   };
+
+  // 하단 그리드 값 계산
+  const v12 = (hs&&hp) ? fmtTerm(s*p, 'x', true) : null;
+  const v13 = (hs&&hq) ? fmtTerm(s*qn, 'c', false) : null;
+  const v21 = (hr&&hp) ? fmtTerm(r*p, 'x2', true) : null;
+  const v22 = (hr&&hq) ? fmtTerm(r*qn, 'x', false) : null;
+  
+  // 목표 문자열
+  const targetC1 = fmtTerm(q.A, 'x2', true);
+  const targetC2 = fmtTerm(q.B, 'x', false);
+  const targetC3 = fmtTerm(q.C, 'c', false);
+  
+  // 중간합계 문자열
+  const sumC2 = (hs&&hp&&hr&&hq) ? fmtTerm(s*p + r*qn, 'x', false) : null;
 
   return(
     <div className="max-w-xl mx-auto px-4 py-10 flex flex-col items-center">
-      {/* 진행 바 */}
       <div className="w-full mb-6">
         <div className="flex justify-between text-sm font-bold text-slate-500 mb-1">
           <span>문제 {idx+1} / {qs.length}</span>
@@ -150,8 +210,6 @@ export default function FactoringGame(){
       </div>
 
       <div className="bg-white w-full p-6 md:p-8 rounded-3xl shadow-2xl shadow-purple-100 border border-purple-50">
-
-        {/* 힌트 */}
         {q.hint&&!fb&&(
           <div className="text-center mb-5">
             {showHint
@@ -161,88 +219,60 @@ export default function FactoringGame(){
           </div>
         )}
 
-        {/* ══════════════════════════════
-            십자가 격자 (이미지와 동일 구조)
+        <div className="max-w-sm mx-auto mb-2 relative">
+          {/* 상단 2x2 입력 그리드 */}
+          <div className="flex gap-2 items-center justify-center mb-4 relative z-10">
+            <span className="text-2xl font-bold text-slate-400 absolute -left-8">×</span>
+            <div className="grid grid-cols-2 gap-2 w-48">
+              <input type="text" value={vP} onChange={e=>setVP(e.target.value)} disabled={fb} className={yellow} placeholder="x"/>
+              <input type="text" value={vQ} onChange={e=>setVQ(e.target.value)} disabled={fb} className={yellow} placeholder="+2"/>
+              <input type="text" value={vR} onChange={e=>setVR(e.target.value)} disabled={fb} className={yellow} placeholder="x"/>
+              <input type="text" value={vS} onChange={e=>setVS(e.target.value)} disabled={fb} className={yellow} placeholder="+9"/>
+            </div>
+          </div>
+          
+          <div className="border-t-4 border-slate-800 w-full mb-4"></div>
+
+          {/* 하단 3x3 계산 그리드 */}
+          <div className="grid grid-cols-3 gap-0 border-x border-t border-slate-200 rounded-t-lg overflow-hidden relative">
+            {/* 세로 구분선(가상) */}
+            <div className="absolute top-0 bottom-0 left-1/3 w-px bg-slate-200 border-dashed border-r z-0"></div>
+            <div className="absolute top-0 bottom-0 left-2/3 w-px bg-slate-200 border-dashed border-r z-0"></div>
             
-            구조:
-            [×]   | [노란 입력: p·x계수] | [노란 입력: q·상수]
-            [노란 입력: r·x계수] | [자동: p*r x²] | [자동: q*r x]
-            [노란 입력: s·상수]  | [자동: p*s x]  | [자동: q*s]
-                  | [레이블: Ax²]        | [레이블: C]
-            ══════════════════════════════ */}
-        <div className="max-w-sm mx-auto mb-2">
-          <div className="grid gap-2" style={{gridTemplateColumns:"52px 1fr 1fr"}}>
+            {/* Row 1 (상수 s 곱하기) */}
+            <div className={calcCell(null)}></div>
+            <div className={calcCell(v12, sumC2 === targetC2)}>{v12||"?"}</div>
+            <div className={calcCell(v13, v13 === targetC3)}>{v13||"?"}</div>
+            
+            {/* Row 2 (x항 rx 곱하기) */}
+            <div className={calcCell(v21, v21 === targetC1)}>{v21||"?"}</div>
+            <div className={calcCell(v22, sumC2 === targetC2)}>{v22||"?"}</div>
+            <div className={calcCell(null)}></div>
+          </div>
 
-            {/* ─ 행 0: × | 노란입력(p) | 노란입력(q) ─ */}
-            <div className="h-14 flex items-center justify-center">
-              <span className="text-2xl font-bold text-slate-400">×</span>
-            </div>
-            {/* 노란 입력: 첫 번째 인수 x계수 (p) */}
-            <div className="relative">
-              <input
-                type="number" value={vP} onChange={e=>setVP(e.target.value)}
-                disabled={fb} className={yellow} placeholder="?"
-              />
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-yellow-400 pointer-events-none font-bold select-none">x</span>
-            </div>
-            {/* 노란 입력: 첫 번째 인수 상수 (q) */}
-            <input type="number" value={vQ} onChange={e=>setVQ(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
-
-            {/* ─ 행 1: 노란입력(r) | 자동(p*r x²) | 자동(q*r x) ─ */}
-            {/* 노란 입력: 두 번째 인수 x계수 (r) */}
-            <div className="relative">
-              <input
-                type="number" value={vR} onChange={e=>setVR(e.target.value)}
-                disabled={fb} className={yellow} placeholder="?"
-              />
-              <span className="absolute right-1 top-1/2 -translate-y-1/2 text-xs text-yellow-400 pointer-events-none font-bold select-none">x</span>
-            </div>
-            {/* 자동: p*r → Ax² */}
-            <div className={autoCell(c11,true,q.A)}>
-              {c11!==null?termX2(c11):<span className="text-slate-200">?</span>}
-            </div>
-            {/* 자동: q*r → 교차항1 */}
-            <div className={autoCell(c12,false)}>
-              {c12!==null?termX(c12):<span className="text-slate-200">?</span>}
-            </div>
-
-            {/* ─ 행 2: 노란입력(s) | 자동(p*s x) | 자동(q*s) ─ */}
-            {/* 노란 입력: 두 번째 인수 상수 (s) */}
-            <input type="number" value={vS} onChange={e=>setVS(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
-            {/* 자동: p*s → 교차항2 */}
-            <div className={autoCell(c21,false)}>
-              {c21!==null?termX(c21):<span className="text-slate-200">?</span>}
-            </div>
-            {/* 자동: q*s → C */}
-            <div className={autoCell(c22,true,q.C)}>
-              {c22!==null?termC(c22):<span className="text-slate-200">?</span>}
-            </div>
-
-            {/* ─ 행 3: 레이블 (Ax², C) ─ */}
-            <div/>
-            <div className="h-9 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg">
-              <span className="font-mono font-bold text-slate-600 text-sm">{termX2(q.A)}</span>
-            </div>
-            <div className="h-9 flex items-center justify-center bg-slate-50 border border-slate-200 rounded-lg">
-              <span className="font-mono font-bold text-slate-600 text-sm">{termC(q.C)}</span>
-            </div>
+          {/* Row 3 (결과 목표 라벨) */}
+          <div className="grid grid-cols-3 gap-0 border border-slate-200 bg-slate-50 rounded-b-lg overflow-hidden relative z-10">
+            <div className="absolute top-0 bottom-0 left-1/3 w-px bg-slate-200 z-0"></div>
+            <div className="absolute top-0 bottom-0 left-2/3 w-px bg-slate-200 z-0"></div>
+            
+            <div className="h-12 flex items-center justify-center font-mono font-extrabold text-blue-600 text-sm md:text-base relative z-10">{targetC1}</div>
+            <div className="h-12 flex items-center justify-center font-mono font-extrabold text-blue-600 text-sm md:text-base relative z-10">{targetC2}</div>
+            <div className="h-12 flex items-center justify-center font-mono font-extrabold text-blue-600 text-sm md:text-base relative z-10">{targetC3}</div>
           </div>
         </div>
 
-        {/* 교차항 합 실시간 피드백 */}
-        {!fb&&crossSum!==null&&(
-          <div className={`text-center text-xs mb-1 font-semibold ${crossSum===q.B?"text-green-500":"text-orange-400"}`}>
-            교차항 합: {termX(crossSum)} {crossSum===q.B?"✅ 맞아요!":"(목표: "+termX(q.B)+")"}
+        {/* 교차항 합 피드백 (디버깅용으로 작게 표시) */}
+        {!fb&&sumC2!==null&&(
+          <div className={`text-center text-xs mt-2 font-semibold ${sumC2===targetC2?"text-green-500":"text-orange-400"}`}>
+            가운데 항 합계: {sumC2} {sumC2===targetC2?"✅ 맞아요!":"(목표: "+targetC2+")"}
           </div>
         )}
 
-        {/* ── 인수분해하세요 + 전체 식 (맨 아래) ── */}
-        <div className="max-w-sm mx-auto mt-4 mb-5 pt-4 border-t border-slate-100 text-center">
+        <div className="max-w-sm mx-auto mt-6 mb-5 pt-4 text-center">
           <p className="text-xs text-slate-400 font-semibold mb-1">인수분해하세요.</p>
           <p className="font-mono text-2xl font-extrabold text-slate-800">{quad(q.A,q.B,q.C)} =</p>
         </div>
 
-        {/* ── 제출 / 피드백 ── */}
         {!fb?(
           <button onClick={submit} className="w-full py-4 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-lg transition-all shadow-lg shadow-purple-200 active:scale-95">
             정답 확인 🚀
@@ -258,21 +288,6 @@ export default function FactoringGame(){
               <p className="text-center text-slate-400 text-sm mb-2">＝</p>
               <p className="font-mono text-center text-xl font-extrabold text-purple-600 mb-4">
                 ({fmtFactor(q.p,q.q)})({fmtFactor(q.r,q.s)})
-              </p>
-              {/* 정답 격자 */}
-              <div className="grid gap-1 max-w-xs mx-auto text-xs font-mono" style={{gridTemplateColumns:"52px 1fr 1fr"}}>
-                <div className="h-9 flex items-center justify-center text-slate-300 font-bold">×</div>
-                <div className="h-9 flex items-center justify-center bg-yellow-100 text-yellow-700 font-bold rounded-lg border border-yellow-300">{termX(q.p)}</div>
-                <div className="h-9 flex items-center justify-center bg-yellow-100 text-yellow-700 font-bold rounded-lg border border-yellow-300">{termC(q.q)}</div>
-                <div className="h-9 flex items-center justify-center bg-yellow-100 text-yellow-700 font-bold rounded-lg border border-yellow-300">{termX(q.r)}</div>
-                <div className="h-9 flex items-center justify-center bg-white text-slate-700 rounded-lg border border-slate-200">{termX2(q.p*q.r)}</div>
-                <div className="h-9 flex items-center justify-center bg-white text-slate-600 rounded-lg border border-slate-200">{termX(q.q*q.r)}</div>
-                <div className="h-9 flex items-center justify-center bg-yellow-100 text-yellow-700 font-bold rounded-lg border border-yellow-300">{termC(q.s)}</div>
-                <div className="h-9 flex items-center justify-center bg-white text-slate-600 rounded-lg border border-slate-200">{termX(q.p*q.s)}</div>
-                <div className="h-9 flex items-center justify-center bg-white text-slate-700 rounded-lg border border-slate-200">{termC(q.q*q.s)}</div>
-              </div>
-              <p className="text-xs text-slate-400 text-center mt-2">
-                교차항: {termX(q.q*q.r)} + {termX(q.p*q.s)} = {termX(q.B)}
               </p>
             </div>
             <button onClick={next} className="w-full py-4 rounded-2xl bg-purple-500 hover:bg-purple-600 text-white font-bold text-lg transition-all shadow-lg shadow-purple-200 active:scale-95">
