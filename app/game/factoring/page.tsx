@@ -50,32 +50,6 @@ function checkAns(ip:number,iq:number,ir:number,is:number,q:Q){
   return ok(ip,iq,ir,is)||ok(ir,is,ip,iq)||ok(-ip,-iq,-ir,-is)||ok(-ir,-is,-ip,-iq);
 }
 
-// 입력값 파싱 헬퍼 (x계수)
-function parseXTerm(val: string): number | null {
-  const clean = val.trim().replace(/\s+/g, "").toLowerCase();
-  if (clean === "") return null;
-  if (clean === "x" || clean === "+x") return 1;
-  if (clean === "-x" || clean === "−x") return -1;
-  
-  if (clean.endsWith("x")) {
-    const numPart = clean.slice(0, -1);
-    if (numPart === "" || numPart === "+") return 1;
-    if (numPart === "-" || numPart === "−") return -1;
-    const parsed = parseInt(numPart);
-    return isNaN(parsed) ? null : parsed;
-  }
-  const parsed = parseInt(clean);
-  return isNaN(parsed) ? null : parsed;
-}
-
-// 입력값 파싱 헬퍼 (상수)
-function parseConstant(val: string): number | null {
-  const clean = val.trim().replace(/\s+/g, "");
-  if (clean === "") return null;
-  const parsed = parseInt(clean);
-  return isNaN(parsed) ? null : parsed;
-}
-
 // 렌더링 포맷 헬퍼
 function fmtTerm(val: number | null, type: 'x2' | 'x' | 'c', isFirstInRow: boolean) {
   if (val === null) return null;
@@ -115,7 +89,7 @@ export default function FactoringGame(){
   const [over,setOver]=useState(false);
   const [showHint,setShowHint]=useState(false);
   
-  // 텍스트 입력값 (사용자가 x나 +2 등을 자유롭게 입력)
+  // 숫자 입력값 (계수 및 상수)
   const [vP,setVP]=useState("");
   const [vQ,setVQ]=useState("");
   const [vR,setVR]=useState("");
@@ -125,11 +99,12 @@ export default function FactoringGame(){
   if(!qs.length)return<div className="p-20 text-center text-lg">불러오는 중...</div>;
 
   const q=qs[idx];
-  const p=parseXTerm(vP), qn=parseConstant(vQ), r=parseXTerm(vR), s=parseConstant(vS);
-  const hp=p!==null, hq=qn!==null, hr=r!==null, hs=s!==null;
+  const p=parseInt(vP), qn=parseInt(vQ), r=parseInt(vR), s=parseInt(vS);
+  const hp=vP!==""&&!isNaN(p), hq=vQ!==""&&!isNaN(qn);
+  const hr=vR!==""&&!isNaN(r), hs=vS!==""&&!isNaN(s);
 
   const submit=()=>{
-    if(!hp||!hq||!hr||!hs){alert("노란 칸을 모두 올바른 형식(예: x, -2x, +3, -5)으로 채워주세요!");return;}
+    if(!hp||!hq||!hr||!hs){alert("노란 칸을 모두 숫자로 채워주세요!");return;}
     const ok=checkAns(p,qn,r,s,q);
     setCorrect(ok);setFb(true);
     if(ok)setScore(prev=>prev+10);
@@ -224,10 +199,16 @@ export default function FactoringGame(){
           <div className="flex gap-2 items-center justify-center mb-4 relative z-10">
             <span className="text-2xl font-bold text-slate-400 absolute -left-8">×</span>
             <div className="grid grid-cols-2 gap-2 w-48">
-              <input type="text" value={vP} onChange={e=>setVP(e.target.value)} disabled={fb} className={yellow} placeholder="x"/>
-              <input type="text" value={vQ} onChange={e=>setVQ(e.target.value)} disabled={fb} className={yellow} placeholder="+2"/>
-              <input type="text" value={vR} onChange={e=>setVR(e.target.value)} disabled={fb} className={yellow} placeholder="x"/>
-              <input type="text" value={vS} onChange={e=>setVS(e.target.value)} disabled={fb} className={yellow} placeholder="+9"/>
+              <div className="relative">
+                <input type="number" value={vP} onChange={e=>setVP(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-yellow-500 font-bold select-none pointer-events-none">x</span>
+              </div>
+              <input type="number" value={vQ} onChange={e=>setVQ(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
+              <div className="relative">
+                <input type="number" value={vR} onChange={e=>setVR(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-yellow-500 font-bold select-none pointer-events-none">x</span>
+              </div>
+              <input type="number" value={vS} onChange={e=>setVS(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
             </div>
           </div>
           
