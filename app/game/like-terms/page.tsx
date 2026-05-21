@@ -25,15 +25,13 @@ function randomInt(min: number, max: number, excludeZero = true) {
 }
 
 function generateQuestion(): Question {
-  const hasXPair = Math.random() > 0.5;
-  let a = randomInt(-4, 4);
-  let c = hasXPair ? randomInt(-4, 4) * (a > 0 ? -1 : 1) : randomInt(-4, 4);
-  if (c === 0) c = a > 0 ? -2 : 2;
+  // x계수: 항상 서로 다른 부호 (zero-pair 보장)
+  const a = randomInt(1, 4);
+  const c = -randomInt(1, 4);
 
-  const hasCPair = !hasXPair || Math.random() > 0.5;
-  let b = randomInt(-5, 5);
-  let d = hasCPair ? randomInt(-5, 5) * (b > 0 ? -1 : 1) : randomInt(-5, 5);
-  if (d === 0) d = b > 0 ? -3 : 3;
+  // 상수항: 항상 서로 다른 부호 (zero-pair 보장)
+  const b = randomInt(1, 5);
+  const d = -randomInt(1, 5);
 
   return { a, b, c, d };
 }
