@@ -201,12 +201,12 @@ export default function FactoringGame(){
             <div className="grid grid-cols-2 gap-2 w-48">
               <div className="relative">
                 <input type="number" value={vP} onChange={e=>setVP(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-yellow-500 font-bold select-none pointer-events-none">x</span>
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-3xl text-yellow-500 font-bold select-none pointer-events-none">x</span>
               </div>
               <input type="number" value={vQ} onChange={e=>setVQ(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
               <div className="relative">
                 <input type="number" value={vR} onChange={e=>setVR(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
-                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-yellow-500 font-bold select-none pointer-events-none">x</span>
+                <span className="absolute right-2 top-1/2 -translate-y-1/2 text-3xl text-yellow-500 font-bold select-none pointer-events-none">x</span>
               </div>
               <input type="number" value={vS} onChange={e=>setVS(e.target.value)} disabled={fb} className={yellow} placeholder="?"/>
             </div>
