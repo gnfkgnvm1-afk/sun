@@ -39,6 +39,19 @@ export default function Playground() {
           </div>
         </Link>
 
+        {/* 동류항 계산 게임 카드 */}
+        <Link href="/game/like-terms" className="group">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-pink-200/60 hover:shadow-pink-300/60 border-2 border-pink-200 hover:border-pink-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-pink-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              💥
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-pink-600 text-xs sm:text-sm font-extrabold mb-1">[중1]</span>
+              동류항 계산
+            </h2>
+          </div>
+        </Link>
+
         {/* 일차방정식 게임 카드 */}
         <Link href="/game/linear-equation" className="group">
           <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-pink-200/60 hover:shadow-pink-300/60 border-2 border-pink-200 hover:border-pink-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
