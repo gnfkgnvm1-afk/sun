@@ -91,6 +91,19 @@ export default function Playground() {
           </div>
         </Link>
 
+        {/* 연립방정식 가감법 게임 카드 */}
+        <Link href="/game/simultaneous-eq" className="group">
+          <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-amber-200/60 hover:shadow-amber-300/60 border-2 border-amber-200 hover:border-amber-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-100 flex items-center justify-center text-2xl sm:text-3xl mb-3 group-hover:scale-110 transition-transform">
+              🔗
+            </div>
+            <h2 className="text-sm sm:text-base font-bold text-slate-800 text-center break-keep flex flex-col items-center">
+              <span className="text-amber-600 text-xs sm:text-sm font-extrabold mb-1">[중2]</span>
+              연립방정식
+            </h2>
+          </div>
+        </Link>
+
         {/* 식의 곱셈 게임 카드 */}
         <Link href="/game/polynomial-multiplication" className="group">
           <div className="bg-white rounded-2xl shadow-md hover:shadow-xl shadow-blue-200/60 hover:shadow-blue-300/60 border-2 border-blue-200 hover:border-blue-400 overflow-hidden flex flex-col items-center justify-center transition-all hover:-translate-y-1.5 duration-300 aspect-square p-4">
