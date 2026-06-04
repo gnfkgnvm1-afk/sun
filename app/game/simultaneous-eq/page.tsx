@@ -27,7 +27,6 @@ function generateProblem(): Problem {
   return { a1, b1, c1: a1 * x + b1 * y, a2, b2, c2: a2 * x + b2 * y, x, y };
 }
 
-/* ── 포맷 헬퍼 ─────────────────────── */
 function fmtTerm(c: number, v: string, isFirst: boolean): string {
   if (c === 0) return "";
   const abs = Math.abs(c);
@@ -35,38 +34,30 @@ function fmtTerm(c: number, v: string, isFirst: boolean): string {
   const num = abs === 1 ? "" : `${abs}`;
   return `${sign}${num}${v}`;
 }
+
 function fmtEq(a: number, b: number, c: number): string {
   const xp = fmtTerm(a, "x", true);
   const yp = fmtTerm(b, "y", xp === "");
-  return `${xp || ""}${yp || ""} = ${c}`;
+  const left = `${xp || ""}${yp || ""}`;
+  return `${left === "" ? "0" : left} = ${c}`;
 }
 
-/* ── 메인 컴포넌트 ─────────────────── */
-type Phase = "multiply" | "solve1" | "solve2" | "feedback" | "done";
+type Phase = "solving" | "feedback" | "done";
 
 export default function SimulEqGame() {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [idx, setIdx] = useState(0);
   const [score, setScore] = useState(0);
-  const [phase, setPhase] = useState<Phase>("multiply");
+  const [phase, setPhase] = useState<Phase>("solving");
   const maxRounds = 5;
 
-  // Step 1: 배수 입력
+  // 모든 입력 상태
   const [m1, setM1] = useState("");
   const [m2, setM2] = useState("");
-  const [mulError, setMulError] = useState("");
-
-  // 소거 결과
-  const [eliminated, setEliminated] = useState<"x" | "y">("x");
-  const [mulA1, setMulA1] = useState(0); const [mulB1, setMulB1] = useState(0); const [mulC1, setMulC1] = useState(0);
-  const [mulA2, setMulA2] = useState(0); const [mulB2, setMulB2] = useState(0); const [mulC2, setMulC2] = useState(0);
-  const [sumCoeff, setSumCoeff] = useState(0); const [sumConst, setSumConst] = useState(0);
-
-  // Step 2, 3: 미지수 입력
-  const [ans1, setAns1] = useState("");
-  const [ans2, setAns2] = useState("");
-  const [step1Ok, setStep1Ok] = useState<boolean | null>(null);
-  const [step2Ok, setStep2Ok] = useState<boolean | null>(null);
+  const [ansX, setAnsX] = useState("");
+  const [ansY, setAnsY] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const init = useCallback(() => {
     const ps: Problem[] = [];
@@ -80,60 +71,58 @@ export default function SimulEqGame() {
   useEffect(() => { init(); }, [init]);
 
   function resetRound() {
-    setPhase("multiply");
-    setM1(""); setM2(""); setMulError("");
-    setAns1(""); setAns2("");
-    setStep1Ok(null); setStep2Ok(null);
+    setPhase("solving");
+    setM1(""); setM2("");
+    setAnsX(""); setAnsY("");
+    setErrorMsg("");
+    setIsCorrect(false);
   }
 
   if (!problems.length) return <div className="p-20 text-center text-lg">불러오는 중...</div>;
   const p = problems[idx];
 
-  /* ── Step 1: 배수 확인 ───── */
-  const submitMultipliers = () => {
-    const n1 = parseInt(m1); const n2 = parseInt(m2);
-    if (isNaN(n1) || isNaN(n2) || n1 === 0 || n2 === 0) {
-      setMulError("0이 아닌 정수를 입력해주세요!"); return;
+  // 실시간 계산
+  const numM1 = parseInt(m1) || 0;
+  const numM2 = parseInt(m2) || 0;
+  
+  const mulA1 = numM1 * p.a1; const mulB1 = numM1 * p.b1; const mulC1 = numM1 * p.c1;
+  const mulA2 = numM2 * p.a2; const mulB2 = numM2 * p.b2; const mulC2 = numM2 * p.c2;
+  
+  const sumA = mulA1 + mulA2;
+  const sumB = mulB1 + mulB2;
+  const sumC = mulC1 + mulC2;
+
+  const submitAnswer = () => {
+    setErrorMsg("");
+    if (numM1 === 0 || numM2 === 0) {
+      setErrorMsg("각 식에 곱할 0이 아닌 정수를 입력해주세요!");
+      return;
     }
-    const elimX = n1 * p.a1 + n2 * p.a2 === 0;
-    const elimY = n1 * p.b1 + n2 * p.b2 === 0;
+    
+    // 배수로 x나 y가 소거되는지 확인
+    const elimX = sumA === 0;
+    const elimY = sumB === 0;
     if (!elimX && !elimY) {
-      setMulError("이 배수로는 변수가 소거되지 않아요! 다시 생각해보세요."); return;
+      setErrorMsg("입력하신 배수로는 x나 y가 소거되지 않습니다. 다시 확인해주세요!");
+      return;
     }
-    setMulError("");
-    setEliminated(elimX ? "x" : "y");
 
-    // 곱한 결과 저장
-    setMulA1(n1 * p.a1); setMulB1(n1 * p.b1); setMulC1(n1 * p.c1);
-    setMulA2(n2 * p.a2); setMulB2(n2 * p.b2); setMulC2(n2 * p.c2);
+    const uX = parseInt(ansX);
+    const uY = parseInt(ansY);
 
-    const sc = elimX ? (n1 * p.b1 + n2 * p.b2) : (n1 * p.a1 + n2 * p.a2);
-    const sv = n1 * p.c1 + n2 * p.c2;
-    setSumCoeff(sc); setSumConst(sv);
+    if (isNaN(uX) || isNaN(uY)) {
+      setErrorMsg("x와 y의 값을 모두 숫자로 입력해주세요!");
+      return;
+    }
 
-    setScore(s => s + 10); // 배수 맞추기 10점
-    setPhase("solve1");
-  };
+    if (uX !== p.x || uY !== p.y) {
+      setErrorMsg("x 또는 y의 값이 틀렸습니다. 다시 계산해보세요!");
+      return;
+    }
 
-  /* ── Step 2: 소거된 변수 제외한 값 ───── */
-  const submitSolve1 = () => {
-    const v = parseInt(ans1);
-    if (isNaN(v)) { return; }
-    const correctVal = eliminated === "x" ? p.y : p.x;
-    const ok = v === correctVal;
-    setStep1Ok(ok);
-    if (ok) setScore(s => s + 5);
-    setPhase("solve2");
-  };
-
-  /* ── Step 3: 나머지 변수 ───── */
-  const submitSolve2 = () => {
-    const v = parseInt(ans2);
-    if (isNaN(v)) { return; }
-    const correctVal = eliminated === "x" ? p.x : p.y;
-    const ok = v === correctVal;
-    setStep2Ok(ok);
-    if (ok) setScore(s => s + 5);
+    // 정답
+    setIsCorrect(true);
+    setScore(s => s + 20);
     setPhase("feedback");
   };
 
@@ -146,7 +135,6 @@ export default function SimulEqGame() {
     }
   };
 
-  /* ── 게임 종료 ───── */
   if (phase === "done") {
     const lv = [
       { min: 90, msg: "🏆 완벽! 연립방정식 마스터!", c: "text-yellow-500" },
@@ -170,13 +158,8 @@ export default function SimulEqGame() {
     );
   }
 
-  /* ── 소거 결과 변수 이름 ───── */
-  const remVar = eliminated === "x" ? "y" : "x";
-  const elmVar = eliminated === "x" ? "x" : "y";
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10 flex flex-col items-center">
-      {/* 진행 바 */}
+    <div className="max-w-3xl mx-auto px-4 py-10 flex flex-col items-center">
       <div className="w-full mb-6">
         <div className="flex justify-between text-sm font-bold text-slate-500 mb-1">
           <span>문제 {idx + 1} / {maxRounds}</span>
@@ -188,143 +171,84 @@ export default function SimulEqGame() {
       </div>
 
       <div className="bg-white w-full p-6 md:p-8 rounded-3xl shadow-2xl shadow-amber-100 border border-amber-50">
-        <h2 className="text-center text-sm font-bold text-slate-400 mb-5">가감법으로 연립방정식을 풀어보세요</h2>
+        <h2 className="text-center text-sm font-bold text-slate-400 mb-5">한 화면에서 가감법으로 식을 풀고 답을 입력하세요</h2>
 
-        {/* ─── 원래 연립방정식 ─── */}
-        <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100 relative">
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-5xl text-slate-300 font-light select-none leading-none">{"{"}</div>
-          <div className="ml-10 space-y-2 font-mono text-xl md:text-2xl font-extrabold text-slate-800">
-            <p>① {fmtEq(p.a1, p.b1, p.c1)}</p>
-            <p>② {fmtEq(p.a2, p.b2, p.c2)}</p>
+        <div className="flex flex-col lg:flex-row gap-6 items-start justify-center">
+          
+          {/* 왼쪽: 연립방정식과 배수 입력 */}
+          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 w-full lg:w-1/2 flex flex-col gap-4">
+            <h3 className="font-bold text-slate-700 text-center mb-2">1. 배수 설정</h3>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-lg font-bold text-slate-600 w-6">①</span>
+              <span className="font-mono text-xl font-extrabold flex-1 text-right">{fmtEq(p.a1, p.b1, p.c1)}</span>
+              <span className="text-slate-400">×</span>
+              <input type="number" value={m1} onChange={e => setM1(e.target.value)} disabled={phase !== "solving"}
+                className="w-16 h-10 text-center text-lg font-bold rounded-lg border-2 border-amber-300 focus:border-amber-500 outline-none bg-white" placeholder="?" />
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-lg font-bold text-slate-600 w-6">②</span>
+              <span className="font-mono text-xl font-extrabold flex-1 text-right">{fmtEq(p.a2, p.b2, p.c2)}</span>
+              <span className="text-slate-400">×</span>
+              <input type="number" value={m2} onChange={e => setM2(e.target.value)} disabled={phase !== "solving"}
+                className="w-16 h-10 text-center text-lg font-bold rounded-lg border-2 border-amber-300 focus:border-amber-500 outline-none bg-white" placeholder="?" />
+            </div>
+          </div>
+
+          {/* 오른쪽: 결과 프리뷰 및 정답 입력 */}
+          <div className="bg-amber-50 rounded-2xl p-6 border border-amber-100 w-full lg:w-1/2">
+            <h3 className="font-bold text-amber-700 text-center mb-4">2. 소거 결과 및 정답</h3>
+            
+            {/* 실시간 연산 결과 프리뷰 */}
+            <div className="font-mono text-lg md:text-xl font-bold text-slate-700 mb-6 relative pl-6">
+              <div className="absolute left-0 top-0 bottom-6 w-3 border-l-2 border-t-2 border-b-2 border-slate-300 rounded-l-lg"></div>
+              <p className="pl-2">{numM1 ? fmtEq(mulA1, mulB1, mulC1) : "..."}</p>
+              <p className="pl-2 relative">
+                <span className="absolute -left-6 text-amber-600 font-extrabold">+)</span>
+                {numM2 ? fmtEq(mulA2, mulB2, mulC2) : "..."}
+              </p>
+              <div className="border-t-2 border-slate-400 mt-2 pt-2 text-center text-blue-700">
+                {(numM1 !== 0 && numM2 !== 0) ? fmtEq(sumA, sumB, sumC) : "..."}
+              </div>
+            </div>
+
+            {/* 최종 정답 입력 */}
+            <div className="flex justify-center gap-4 mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-slate-700 font-mono">x =</span>
+                <input type="number" value={ansX} onChange={e => setAnsX(e.target.value)} disabled={phase !== "solving"}
+                  className="w-16 h-12 text-center text-lg font-bold rounded-xl border-2 border-blue-300 focus:border-blue-500 outline-none bg-white" placeholder="?" />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-slate-700 font-mono">y =</span>
+                <input type="number" value={ansY} onChange={e => setAnsY(e.target.value)} disabled={phase !== "solving"}
+                  className="w-16 h-12 text-center text-lg font-bold rounded-xl border-2 border-blue-300 focus:border-blue-500 outline-none bg-white" placeholder="?" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ─── STEP 1: 배수 입력 ─── */}
-        {phase === "multiply" && (
-          <div className="bg-amber-50 rounded-2xl p-6 border border-amber-100">
-            <h3 className="font-bold text-amber-700 mb-4 text-center">
-              📌 Step 1: 변수를 소거하기 위해 각 식에 곱할 수를 입력하세요
-            </h3>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-bold text-slate-600">①</span>
-                <span className="text-slate-500">×</span>
-                <input type="number" value={m1} onChange={e => { setM1(e.target.value); setMulError(""); }}
-                  className="w-20 h-12 text-center text-lg font-bold rounded-xl border-2 border-amber-300 focus:border-amber-500 outline-none bg-white" placeholder="?" />
+        {errorMsg && phase === "solving" && (
+          <p className="text-red-500 text-center font-bold mt-6 animate-pulse bg-red-50 py-2 rounded-lg">{errorMsg}</p>
+        )}
+
+        <div className="mt-8 flex justify-center">
+          {phase === "solving" ? (
+            <button onClick={submitAnswer} className="w-full max-w-sm py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xl transition-all shadow-lg shadow-amber-200 active:scale-95">
+              정답 확인 🚀
+            </button>
+          ) : (
+            <div className="w-full max-w-sm flex flex-col items-center">
+              <div className="text-2xl font-bold text-green-500 mb-4 bg-green-50 w-full py-3 rounded-xl text-center border border-green-100">
+                🎉 정답입니다!
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-bold text-slate-600">②</span>
-                <span className="text-slate-500">×</span>
-                <input type="number" value={m2} onChange={e => { setM2(e.target.value); setMulError(""); }}
-                  className="w-20 h-12 text-center text-lg font-bold rounded-xl border-2 border-amber-300 focus:border-amber-500 outline-none bg-white" placeholder="?" />
-              </div>
+              <button onClick={nextRound} className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xl transition-all shadow-lg shadow-amber-200 active:scale-95">
+                {idx + 1 < maxRounds ? "다음 문제 ➔" : "결과 보기 🏆"}
+              </button>
             </div>
-            {mulError && <p className="text-red-500 text-sm font-bold text-center mb-3 animate-pulse">{mulError}</p>}
-            <p className="text-xs text-slate-400 text-center mb-4">
-              💡 두 식을 더했을 때 x 또는 y가 사라지도록 곱할 수를 정하세요!
-            </p>
-            <button onClick={submitMultipliers} className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg transition-all active:scale-95 shadow-md shadow-amber-200">
-              확인 ✓
-            </button>
-          </div>
-        )}
+          )}
+        </div>
 
-        {/* ─── 곱한 결과 + 소거 과정 (Step 2 이후 표시) ─── */}
-        {phase !== "multiply" && (
-          <div className="mb-6">
-            {/* 화살표 + 곱한 결과 */}
-            <div className="flex items-start gap-2 mb-1">
-              <span className="text-amber-500 font-bold text-lg mt-1 select-none">→</span>
-              <div className="bg-amber-50 rounded-xl p-4 border border-amber-100 flex-1 relative">
-                <div className="absolute left-2 top-1/2 -translate-y-1/2 text-3xl text-amber-300 font-light select-none leading-none">{"{"}</div>
-                <div className="ml-7 space-y-1 font-mono text-base md:text-lg font-bold text-slate-700">
-                  <p>{fmtEq(mulA1, mulB1, mulC1)} <span className="text-amber-400 text-sm">← ①×{m1}</span></p>
-                  <p className="relative">
-                    <span className="absolute -left-7 text-amber-600 font-extrabold text-sm">+)</span>
-                    {fmtEq(mulA2, mulB2, mulC2)} <span className="text-amber-400 text-sm">← ②×{m2}</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 가로선 + 결과 */}
-            <div className="ml-7 border-t-2 border-slate-400 my-2" />
-            <div className="ml-7 font-mono text-lg md:text-xl font-extrabold text-blue-700 text-center py-1">
-              {sumCoeff === 1 ? "" : sumCoeff === -1 ? "−" : sumCoeff}{remVar} = {sumConst}
-            </div>
-          </div>
-        )}
-
-        {/* ─── STEP 2: 남은 변수 풀기 ─── */}
-        {phase === "solve1" && (
-          <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
-            <h3 className="font-bold text-blue-700 mb-4 text-center">
-              📌 Step 2: {remVar}의 값을 구하세요
-            </h3>
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <span className="text-xl font-bold text-slate-700 font-mono">{remVar} =</span>
-              <input type="number" value={ans1} onChange={e => setAns1(e.target.value)}
-                className="w-24 h-14 text-center text-xl font-bold rounded-xl border-2 border-blue-300 focus:border-blue-500 outline-none bg-white" placeholder="?" />
-            </div>
-            <button onClick={submitSolve1} className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-lg transition-all active:scale-95 shadow-md shadow-blue-200">
-              확인 ✓
-            </button>
-          </div>
-        )}
-
-        {/* ─── Step 2 결과 표시 ─── */}
-        {phase !== "multiply" && phase !== "solve1" && (
-          <div className="ml-7 font-mono text-lg font-extrabold text-center py-1 mb-2">
-            <span className={step1Ok ? "text-green-600" : "text-red-500"}>
-              {step1Ok ? "✅" : "❌"} {remVar} = {eliminated === "x" ? p.y : p.x}
-            </span>
-          </div>
-        )}
-
-        {/* ─── STEP 3: 대입하여 나머지 변수 풀기 ─── */}
-        {phase === "solve2" && (
-          <div className="bg-green-50 rounded-2xl p-6 border border-green-100 mt-4">
-            <h3 className="font-bold text-green-700 mb-2 text-center">
-              📌 Step 3: {remVar} = {eliminated === "x" ? p.y : p.x} 를 ①에 대입하여 {elmVar}의 값을 구하세요
-            </h3>
-            <p className="text-sm text-slate-500 text-center mb-4 font-mono">
-              ① {fmtEq(p.a1, p.b1, p.c1)}
-            </p>
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <span className="text-xl font-bold text-slate-700 font-mono">{elmVar} =</span>
-              <input type="number" value={ans2} onChange={e => setAns2(e.target.value)}
-                className="w-24 h-14 text-center text-xl font-bold rounded-xl border-2 border-green-300 focus:border-green-500 outline-none bg-white" placeholder="?" />
-            </div>
-            <button onClick={submitSolve2} className="w-full py-3 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg transition-all active:scale-95 shadow-md shadow-green-200">
-              확인 ✓
-            </button>
-          </div>
-        )}
-
-        {/* ─── FEEDBACK ─── */}
-        {phase === "feedback" && (
-          <div className="mt-4">
-            <div className="ml-7 font-mono text-lg font-extrabold text-center py-1 mb-4">
-              <span className={step2Ok ? "text-green-600" : "text-red-500"}>
-                {step2Ok ? "✅" : "❌"} {elmVar} = {eliminated === "x" ? p.x : p.y}
-              </span>
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 mb-4 text-center">
-              <p className="font-mono text-2xl font-black text-amber-600">
-                ∴ x = {p.x}, y = {p.y}
-              </p>
-            </div>
-
-            <div className={`text-2xl font-bold text-center mb-4 ${step1Ok && step2Ok ? "text-green-500" : "text-amber-500"}`}>
-              {step1Ok && step2Ok ? "🎉 완벽해요!" : "💪 풀이 과정을 다시 확인해보세요!"}
-            </div>
-
-            <button onClick={nextRound} className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-lg transition-all shadow-lg shadow-amber-200 active:scale-95">
-              {idx + 1 < maxRounds ? "다음 문제 ➔" : "결과 보기 🏆"}
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
